@@ -20,11 +20,17 @@ from django.urls import path, include
 from adv.views import *
 from rest_framework import routers
 
-router = routers.SimpleRouter()
-router.register(r'advertisement', AdvertisementAPIList)
+# router = routers.SimpleRouter()
+# router.register(r'advertisement', AdvertisementAPIList)
+#
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('api/v1/', include(router.urls)),
+#     # path('advertisement/', AdvertisementAPIList.as_view())
+# ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include(router.urls)),
-    # path('advertisement/', AdvertisementAPIList.as_view())
+    path('advertisement/', AdvertisementAPIList),
+    path('advertisement/<int:pk>', AdvertisementAPI)
 ]
