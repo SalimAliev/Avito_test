@@ -31,6 +31,6 @@ from rest_framework import routers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('advertisement/', AdvertisementAPIList),
+    path('advertisement/', AdvertisementAPIListCreate),
     path('advertisement/<int:pk>', AdvertisementAPI)
 ]

@@ -1,3 +1,5 @@
+import json
+
 from django.db.models import F
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -19,14 +21,20 @@ def AdvertisementAPIListCreate(request):
                 'price': ad.price
             }
             ad_list.append(ad_data)
-        paginator = Paginator(ad_list, 20)
+        paginator = Paginator(ad_list, 10)
         page_number = request.GET.get('page')
         page_advertisements = paginator.get_page(page_number)
         return JsonResponse({'Ответ': list(page_advertisements)})
 
     if request.method == 'POST':
-        data = request.POST.dict()
-        new_ad =
+        data = json.loads(request.body)
+        data_without_paths = dict(data)
+        del data_without_paths['image_paths']
+        advertisement = Advertisement.objects.create(**data_without_paths)
+        for i in data['image_paths']:
+            AdvertisementPhoto.objects.create(advertisement=advertisement, image_path=i)
+
+        return JsonResponse({'status': 'success:', 'id': advertisement.id})
 
 def AdvertisementAPI(request, pk):
     if request.method == 'GET' and pk:
@@ -45,8 +53,9 @@ def AdvertisementAPI(request, pk):
                 ad_data['image_paths'] = image_paths
 
         return JsonResponse({'Ответ': ad_data})
+    else:
+        return JsonResponse({'error': 'Метод не поддерживается'}, status=405)
 
-def AdvertisementAPICreate(request):
 
 
 
